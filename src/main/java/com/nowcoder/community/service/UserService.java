@@ -1,6 +1,8 @@
 package com.nowcoder.community.service;
 
+import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
+import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
@@ -32,6 +34,8 @@ public class UserService implements CommunityConstant {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     public User findById(int userId) {
         return userMapper.selectById(userId);
@@ -124,4 +128,55 @@ public class UserService implements CommunityConstant {
         }
     }
 
+    /**
+     * 注入: LoginTicketMapper
+     * 参数: 登录传入的参数，password 加密后再跟数据库的对比，expiredSeconds凭证过期的秒数
+     * return: map存储多种情况的返回结果
+     */
+    public Map<String, Object> login(String username, String password, int expiredSeconds){
+        Map<String, Object> map = new HashMap<>();
+        // username为空
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "账号不能为空！");
+            return map;
+        }
+        // password为空
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "密码不能为空！");
+            return map;
+        }
+        // 验证账号
+        // 1. 账号存在？
+        // 2. 状态激活了没？
+        // 3. 验证密码？
+        User user = userMapper.selectByName(username);
+        // 账号不存在
+        if(user == null) {
+            map.put("usernameMsg", "该账号不存在！");
+            return map;
+        }
+        // 状态没激活 0
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "该账号未激活！");
+            return map;
+        }
+        // 密码不正确
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "密码错误！");
+            return map;
+        }
+        // 账号密码状态验证成功
+
+        //生成登录凭证 LoginTicket插入到数据库中
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis()+ expiredSeconds * 1000));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+
+        map.put("ticket", loginTicket.getTicket());
+        return map;
+    }
 }
