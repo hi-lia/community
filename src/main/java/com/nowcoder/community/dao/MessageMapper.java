@@ -23,4 +23,11 @@ public interface MessageMapper {
     // 查询未读私信的数量 conversationId可以不传，传了就拼上去，这样可以实现两种业务
     int selectLetterUnreadCount(int userId, String conversationId);
 
+    //新增一个消息
+    int insertMessage (Message message);
+
+    // 修改消息的状态 （可批量修改）
+    int updateStatus(List<Integer> ids, int status);
+
+
 }
