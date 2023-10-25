@@ -8,7 +8,7 @@ public class Comment {
     private int userId;
     private int entityType;
     private int entityId;
-    private int targetID;
+    private int targetId;
     private String content;
     private int status;
     private Date createTime;
@@ -45,12 +45,12 @@ public class Comment {
         this.entityId = entityId;
     }
 
-    public int getTargetID() {
-        return targetID;
+    public int getTargetId() {
+        return targetId;
     }
 
-    public void setTargetID(int targetID) {
-        this.targetID = targetID;
+    public void setTargetId(int targetId) {
+        this.targetId = targetId;
     }
 
     public String getContent() {
@@ -84,7 +84,7 @@ public class Comment {
                 ", userId=" + userId +
                 ", entityType=" + entityType +
                 ", entityId=" + entityId +
-                ", targetID=" + targetID +
+                ", targetId=" + targetId +
                 ", content='" + content + '\'' +
                 ", status=" + status +
                 ", createTime=" + createTime +
