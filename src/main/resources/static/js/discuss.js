@@ -1,7 +1,7 @@
-function like(btn, entityType, entityId) {
+function like(btn, entityType, entityId, entityUserId) {
     $.post(
         CONTEXT_PATH + "/like",
-        {"entityType": entityType, "entityId": entityId},
+        {"entityType": entityType, "entityId": entityId, "entityUserId": entityUserId},
         function(data) {
             data = JSON.parse(data);
             if (data.code == 0) { // 成功的话，改变页面赞的数量，我们有btn，我们访问它的子节点

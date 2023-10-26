@@ -24,11 +24,11 @@ public class LikeController {
 
     @RequestMapping(path="/like", method = RequestMethod.POST)
     @ResponseBody
-    public String Like(int entityType, int entityId) {
+    public String Like(int entityType, int entityId, int entityUserId) {
         User user = hostHolder.getUser();
         // 此处可以用拦截器来阻止未登录用户的访问，但后面会用spring security来处理，此处先放着
         // 点赞
-        likeService.like(user.getId(), entityType, entityId);
+        likeService.like(user.getId(), entityType, entityId, entityUserId);
         // 数量
         long likeCount = likeService.findEntityLikeCount(entityType, entityId);
         // 状态
