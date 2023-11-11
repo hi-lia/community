@@ -50,7 +50,7 @@ public class ElasticsearchTests {
         discussRepository.save(discussMapper.selectDiscussPostById(243));
     }
 
-    @Test
+/*    @Test
     public void testInsertList(){
         discussRepository.saveAll(discussMapper.selectDiscussPost(101, 0, 100));
         discussRepository.saveAll(discussMapper.selectDiscussPost(102, 0, 100));
@@ -61,7 +61,7 @@ public class ElasticsearchTests {
         discussRepository.saveAll(discussMapper.selectDiscussPost(132, 0, 100));
         discussRepository.saveAll(discussMapper.selectDiscussPost(133, 0, 100));
         discussRepository.saveAll(discussMapper.selectDiscussPost(134, 0, 100));
-    }
+    }*/
     @Test
     public void testUpdate() {
         DiscussPost post = discussMapper.selectDiscussPostById(231);
